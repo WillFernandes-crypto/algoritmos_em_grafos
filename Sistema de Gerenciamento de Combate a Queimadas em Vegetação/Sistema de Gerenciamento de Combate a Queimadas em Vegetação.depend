@@ -1,0 +1,53 @@
+# depslib dependency file v1.0
+1747434513 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\graph.c
+	<stdio.h>
+	<stdlib.h>
+	"graph.h"
+
+1747434500 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\graph.h
+	"region.h"
+
+1747434120 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\region.h
+
+1747434379 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\region.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"region.h"
+
+1747434773 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\report.c
+	<stdio.h>
+	"report.h"
+	"graph.h"
+	"region.h"
+	"wildfire_management.h"
+
+1747434804 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\report.h
+	"graph.h"
+	"wildfire_management.h"
+
+1747434695 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\wildfire_management.h
+
+1747434849 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\utils.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"utils.h"
+
+1747434866 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\utils.h
+
+1747434666 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\wildfire_management.c
+	<stdio.h>
+	<stdlib.h>
+	"wildfire_management.h"
+
+1747435432 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\main.c
+	<stdio.h>
+	<stdlib.h>
+	<locale.h>
+	"graph.h"
+	"region.h"
+	"wildfire_management.h"
+	"report.h"
+	"utils.h"
+
