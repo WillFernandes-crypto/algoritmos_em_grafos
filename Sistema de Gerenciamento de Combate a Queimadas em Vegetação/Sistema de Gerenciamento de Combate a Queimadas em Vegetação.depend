@@ -1,15 +1,17 @@
 # depslib dependency file v1.0
-1747434513 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\graph.c
+1747436165 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\graph.c
 	<stdio.h>
 	<stdlib.h>
+	<string.h>
+	<float.h>
 	"graph.h"
 
-1747434500 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\graph.h
+1747436012 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\graph.h
 	"region.h"
 
-1747434120 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\region.h
+1747435818 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\region.h
 
-1747434379 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\region.c
+1747435863 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\region.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -26,7 +28,7 @@
 	"graph.h"
 	"wildfire_management.h"
 
-1747434695 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\wildfire_management.h
+1747437180 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\wildfire_management.h
 
 1747434849 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\utils.c
 	<stdio.h>
@@ -36,15 +38,16 @@
 
 1747434866 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\utils.h
 
-1747434666 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\wildfire_management.c
+1747437486 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\wildfire_management.c
 	<stdio.h>
 	<stdlib.h>
+	<string.h>
 	"wildfire_management.h"
 
-1747435432 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\main.c
+1747443057 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\main.c
 	<stdio.h>
 	<stdlib.h>
-	<locale.h>
+	<windows.h>
 	"graph.h"
 	"region.h"
 	"wildfire_management.h"

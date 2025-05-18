@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <locale.h>
+#include <windows.h>
 #include "graph.h"
 #include "region.h"
 #include "wildfire_management.h"
@@ -17,15 +17,16 @@ void menu() {
     printf("4. Relatório de regiões\n");
     printf("5. Relatório de queimadas\n");
     printf("6. Relatório de queimadas por região\n");
+    printf("7. Salvar dados\n");
+    printf("8. Carregar dados\n");
     printf("0. Sair\n");
     printf("Escolha uma opção: ");
 }
 
 int main() {
+    SetConsoleOutputCP(CP_UTF8);
 
-    setlocale(LC_ALL, "Portuguese");
-
-    int num_regioes = read_int("Informe o número de regiões: ");
+    int num_regioes = read_positive_int("Informe o número de regiões: ");
     if (num_regioes <= 0 || num_regioes > MAX_REGIOES) {
         printf("Número de regiões inválido.\n");
         return 1;
@@ -40,7 +41,7 @@ int main() {
         opcao = read_int("");
         switch (opcao) {
             case 1: {
-                int idx = read_int("Índice da região (0 a N-1): ");
+                int idx = read_positive_int("Índice da região (0 a N-1): ");
                 if (idx < 0 || idx >= num_regioes) {
                     printf("Índice inválido.\n");
                     break;
@@ -49,16 +50,16 @@ int main() {
                 float area;
                 read_string("Nome: ", nome, MAX_NOME);
                 read_string("Tipo de vegetação: ", tipo, MAX_TIPO);
-                area = read_float("Área (ha): ");
+                area = read_positive_float("Área (ha): ");
                 Region* reg = create_region(nome, tipo, area);
                 set_region(graph, idx, reg);
                 printf("Região cadastrada!\n");
                 break;
             }
             case 2: {
-                int src = read_int("Região origem: ");
-                int dest = read_int("Região destino: ");
-                float dist = read_float("Distância: ");
+                int src = read_positive_int("Região origem: ");
+                int dest = read_positive_int("Região destino: ");
+                float dist = read_positive_float("Distância: ");
                 if (src < 0 || src >= num_regioes || dest < 0 || dest >= num_regioes) {
                     printf("Índice inválido.\n");
                     break;
@@ -68,15 +69,19 @@ int main() {
                 break;
             }
             case 3: {
-                int reg = read_int("Índice da região: ");
+                int reg = read_positive_int("Índice da região: ");
                 if (reg < 0 || reg >= num_regioes) {
                     printf("Índice inválido.\n");
                     break;
                 }
                 char data[MAX_DATA];
                 float intensidade;
-                read_string("Data (DD/MM/AAAA): ", data, MAX_DATA);
-                intensidade = read_float("Intensidade: ");
+                do {
+                    read_string("Data (DD/MM/AAAA): ", data, MAX_DATA);
+                    if (!validate_date(data))
+                        printf("Data inválida! Use o formato DD/MM/AAAA.\n");
+                } while (!validate_date(data));
+                intensidade = read_positive_float("Intensidade: ");
                 Wildfire* wf = create_wildfire(reg, data, intensidade);
                 add_wildfire(wildfires, wf);
                 printf("Queimada registrada!\n");
@@ -89,7 +94,7 @@ int main() {
                 report_all_wildfires(wildfires);
                 break;
             case 6: {
-                int reg = read_int("Índice da região: ");
+                int reg = read_positive_int("Índice da região: ");
                 if (reg < 0 || reg >= num_regioes) {
                     printf("Índice inválido.\n");
                     break;
@@ -97,6 +102,24 @@ int main() {
                 report_wildfires_by_region(graph, wildfires, reg);
                 break;
             }
+            case 7: // Salvar dados
+                if (save_regions("regioes.bin", graph->regions, num_regioes) &&
+                    save_edges("arestas.bin", graph) &&
+                    save_wildfires("queimadas.bin", wildfires)) {
+                    printf("Dados salvos com sucesso!\n");
+                } else {
+                    printf("Erro ao salvar dados!\n");
+                }
+                break;
+            case 8: // Carregar dados
+                if (load_regions("regioes.bin", graph->regions, num_regioes) &&
+                    load_edges("arestas.bin", graph) &&
+                    load_wildfires("queimadas.bin", wildfires)) {
+                    printf("Dados carregados com sucesso!\n");
+                } else {
+                    printf("Erro ao carregar dados!\n");
+                }
+                break;
             case 0:
                 printf("Saindo...\n");
                 break;

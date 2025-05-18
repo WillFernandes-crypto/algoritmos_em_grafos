@@ -23,5 +23,14 @@ void set_region(Graph* graph, int index, Region* region);
 Region* get_region(const Graph* graph, int index);
 void free_graph(Graph* graph);
 
+// Persistência das arestas do grafo
+int save_edges(const char* filename, const Graph* graph);
+int load_edges(const char* filename, Graph* graph);
+
+// Algoritmos de grafos
+float dijkstra(const Graph* graph, int origem, int destino, int* caminho, int* tam_caminho);
+void bfs(const Graph* graph, int origem, void (*visit)(int));
+void dfs(const Graph* graph, int origem, void (*visit)(int));
+
 #endif // GRAPH_H
 

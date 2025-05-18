@@ -15,5 +15,9 @@ Region* create_region(const char* nome, const char* tipo_vegetacao, float area);
 void free_region(Region* reg);
 void print_region(const Region* reg);
 
+// Funções de persistência
+int save_regions(const char* filename, Region** regions, int num_regions);
+int load_regions(const char* filename, Region** regions, int max_regions);
+
 #endif // REGION_H
 

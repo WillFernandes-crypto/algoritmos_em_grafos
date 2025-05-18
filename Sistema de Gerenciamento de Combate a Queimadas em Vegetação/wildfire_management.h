@@ -21,5 +21,9 @@ WildfireList* create_wildfire_list();
 void free_wildfire_list(WildfireList* list);
 void print_wildfires(const WildfireList* list);
 
+// Persistência de queimadas
+int save_wildfires(const char* filename, const WildfireList* list);
+int load_wildfires(const char* filename, WildfireList* list);
+
 #endif // WILDFIRE_MANAGEMENT_H
 

@@ -31,9 +31,29 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="graph.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="graph.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="region.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="region.h" />
+		<Unit filename="report.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="report.h" />
+		<Unit filename="utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utils.h" />
+		<Unit filename="wildfire_management.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="wildfire_management.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

@@ -28,3 +28,37 @@ void print_region(const Region* reg) {
     printf("Área: %.2f hectares\n", reg->area);
 }
 
+// Salva as regiões em arquivo binário
+int save_regions(const char* filename, Region** regions, int num_regions) {
+    FILE* f = fopen(filename, "wb");
+    if (!f) return 0;
+    fwrite(&num_regions, sizeof(int), 1, f);
+    for (int i = 0; i < num_regions; i++) {
+        if (regions[i]) {
+            fwrite(regions[i], sizeof(Region), 1, f);
+        } else {
+            Region empty = { "", "", 0.0f };
+            fwrite(&empty, sizeof(Region), 1, f);
+        }
+    }
+    fclose(f);
+    return 1;
+}
+
+// Carrega as regiões de arquivo binário
+int load_regions(const char* filename, Region** regions, int max_regions) {
+    FILE* f = fopen(filename, "rb");
+    if (!f) return 0;
+    int num_regions = 0;
+    fread(&num_regions, sizeof(int), 1, f);
+    if (num_regions > max_regions) num_regions = max_regions;
+    for (int i = 0; i < num_regions; i++) {
+        Region temp;
+        fread(&temp, sizeof(Region), 1, f);
+        if (regions[i]) free_region(regions[i]);
+        regions[i] = create_region(temp.nome, temp.tipo_vegetacao, temp.area);
+    }
+    fclose(f);
+    return num_regions;
+}
+

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "wildfire_management.h"
 
 // Cria um novo registro de queimada
@@ -49,4 +50,50 @@ void print_wildfires(const WildfireList* list) {
         printf("Região: %d | Data: %s | Intensidade: %.2f\n", current->region_index, current->data, current->intensidade);
         current = current->next;
     }
+}
+
+// Salva queimadas em arquivo binário
+int save_wildfires(const char* filename, const WildfireList* list) {
+    FILE* f = fopen(filename, "wb");
+    if (!f) return 0;
+    // Conta quantas queimadas existem
+    int count = 0;
+    Wildfire* curr = list->head;
+    while (curr) {
+        count++;
+        curr = curr->next;
+    }
+    fwrite(&count, sizeof(int), 1, f);
+    curr = list->head;
+    while (curr) {
+        fwrite(&curr->region_index, sizeof(int), 1, f);
+        fwrite(curr->data, sizeof(char), MAX_DATA, f);
+        fwrite(&curr->intensidade, sizeof(float), 1, f);
+        curr = curr->next;
+    }
+    fclose(f);
+    return 1;
+}
+
+// Carrega queimadas de arquivo binário
+int load_wildfires(const char* filename, WildfireList* list) {
+    FILE* f = fopen(filename, "rb");
+    if (!f) return 0;
+    // Limpa lista antiga
+    free_wildfire_list(list);
+    list->head = NULL;
+    int count = 0;
+    fread(&count, sizeof(int), 1, f);
+    for (int i = 0; i < count; i++) {
+        int region_index;
+        char data[MAX_DATA];
+        float intensidade;
+        fread(&region_index, sizeof(int), 1, f);
+        fread(data, sizeof(char), MAX_DATA, f);
+        fread(&intensidade, sizeof(float), 1, f);
+        Wildfire* wf = create_wildfire(region_index, data, intensidade);
+        add_wildfire(list, wf);
+    }
+    fclose(f);
+    return 1;
 }
