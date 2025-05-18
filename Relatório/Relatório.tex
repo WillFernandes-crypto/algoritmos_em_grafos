@@ -2,16 +2,121 @@
 
 \begin{document}
 
-\title{Relatório}
-\author{MEU NOME}
-\date{}
+\title{Relatório do Projeto: Sistema de Gerenciamento de Combate a Queimadas em Vegetação}
+\author{Wilson Fernandes - Ciência da Computação}
+\date{2025}
 
 \maketitle
 
 \section{Introdução}
 
-\section{Desenvolvimento}
+Este relatório apresenta o desenvolvimento do projeto "Sistema de Gerenciamento de Combate a Queimadas em Vegetação", realizado para a disciplina de Algoritmos em Grafos. O objetivo do sistema é permitir o gerenciamento eficiente de regiões, queimadas e conexões entre regiões, possibilitando o registro, consulta e análise de dados relevantes para o combate a queimadas, utilizando estruturas de grafos e algoritmos clássicos da área. O projeto foi desenvolvido em linguagem C, com foco em modularização, clareza e aderência aos requisitos propostos.
+
+\section{Contextualização e Estrutura do Projeto}
+
+O sistema foi dividido em módulos, cada um responsável por uma parte fundamental da aplicação:
+
+\begin{itemize}
+    \item \textbf{graph.c / graph.h}: Responsável pela estrutura do grafo, representando regiões como vértices e conexões (distâncias) como arestas. Utiliza listas de adjacência para garantir eficiência nas operações de inserção e consulta, justificando a escolha pela facilidade de manipulação e baixo custo para grafos esparsos.
+    \item \textbf{region.c / region.h}: Gerencia os dados das regiões, como nome, tipo de vegetação e área. As regiões são armazenadas em um vetor de ponteiros para estruturas \texttt{Region}, facilitando o acesso e a manipulação dinâmica.
+    \item \textbf{wildfire\_management.c / wildfire\_management.h}: Implementa a lista encadeada de queimadas (\texttt{WildfireList}), permitindo o registro de queimadas associadas a regiões, datas e intensidades.
+    \item \textbf{report.c / report.h}: Gera relatórios detalhados sobre regiões e queimadas, atendendo aos requisitos de consulta do projeto.
+    \item \textbf{main.c}: Implementa a interface textual (menu), integrando as funcionalidades dos módulos e controlando o fluxo do sistema.
+\end{itemize}
+
+A modularização foi uma decisão importante para garantir a organização do código, facilitar a manutenção e permitir a reutilização de funções.
+
+\section{Funcionalidades Implementadas}
+
+O sistema implementa as seguintes funcionalidades, conforme os requisitos do projeto:
+
+\begin{itemize}
+    \item Cadastro de regiões, com nome, tipo de vegetação e área.
+    \item Adição de arestas (distâncias) entre regiões.
+    \item Registro de queimadas, associando-as a uma região, data e intensidade.
+    \item Geração de relatórios:
+        \begin{itemize}
+            \item Listagem de todas as regiões cadastradas.
+            \item Listagem de todas as queimadas registradas.
+            \item Relatório de queimadas por região.
+        \end{itemize}
+    \item Persistência de dados: salvamento e carregamento de regiões, arestas e queimadas em arquivos binários.
+    \item Interface de menu interativo, com validação de entradas e mensagens de erro.
+\end{itemize}
+
+\textbf{Exemplo de uso:}
+
+\begin{verbatim}
+=== Sistema de Gerenciamento de Combate a Queimadas ===
+1. Cadastrar região
+2. Adicionar aresta (distância entre regiões)
+3. Registrar queimada
+4. Relatório de regiões
+5. Relatório de queimadas
+6. Relatório de queimadas por região
+7. Salvar dados
+8. Carregar dados
+0. Sair
+Escolha uma opção: 1
+Nome da região: Cerrado Norte
+Tipo de vegetação: Cerrado
+Área (hectares): 150.0
+Região cadastrada!
+\end{verbatim}
+
+\section{Decisões de Projeto}
+
+\begin{itemize}
+    \item \textbf{Listas de adjacência}: Escolhidas para representar o grafo devido à eficiência em operações de inserção e consulta, especialmente em grafos esparsos.
+    \item \textbf{Modularização}: O código foi dividido em módulos para separar responsabilidades, facilitar testes e manutenção.
+    \item \textbf{Uso de ponteiros}: Permitiram a manipulação dinâmica das estruturas, como regiões e queimadas, otimizando o uso de memória.
+    \item \textbf{Persistência binária}: Arquivos binários foram utilizados para garantir a integridade e eficiência no salvamento e carregamento dos dados.
+\end{itemize}
+
+\section{Principais Funções e Algoritmos}
+
+\begin{itemize}
+    \item \texttt{bfs} (\textit{graph.c}): Implementa a busca em largura, permitindo percorrer o grafo e identificar componentes conexas.
+    \item \texttt{dfs} (\textit{graph.c}): Realiza a busca em profundidade, útil para análise de conectividade.
+    \item \texttt{dijkstra} (\textit{graph.c}): Calcula o menor caminho entre duas regiões, permitindo simular deslocamentos eficientes das equipes de combate.
+    \item \texttt{save\_regions}, \texttt{save\_edges}, \texttt{save\_wildfires} (\textit{region.c}, \textit{graph.c}, \textit{wildfire\_management.c}): Funções responsáveis por salvar os dados em arquivos binários.
+    \item \texttt{load\_regions}, \texttt{load\_edges}, \texttt{load\_wildfires}: Realizam a leitura dos dados salvos, restaurando o estado do sistema.
+    \item \texttt{report\_all\_regions}, \texttt{report\_all\_wildfires}, \texttt{report\_wildfires\_by\_region} (\textit{report.c}): Geram relatórios detalhados para consulta.
+    \item \texttt{validate\_date} (\textit{utils.c}): Garante a integridade das datas inseridas pelo usuário.
+\end{itemize}
+
+\section{Testes Realizados}
+
+Foram implementados testes automatizados (arquivo \textit{tests.c}) para validar funções essenciais, como \texttt{validate\_date}, criação de regiões, inserção de arestas e registro de queimadas. Além disso, testes manuais foram realizados durante o uso do menu interativo, garantindo o correto funcionamento das funcionalidades e a robustez da persistência de dados.
+
+\section{Desafios e Melhorias}
+
+\textbf{Desafios:} O principal desafio foi garantir a integridade dos dados ao salvar e carregar arquivos binários, especialmente ao lidar com ponteiros e estruturas dinâmicas. Esse desafio foi superado com a implementação cuidadosa das funções de persistência, garantindo que os dados fossem serializados e desserializados corretamente.
+
+\textbf{Melhorias Futuras:}
+\begin{itemize}
+    \item Utilizar uma fila de prioridade (heap) para otimizar o algoritmo de Dijkstra em grafos maiores, reduzindo a complexidade e melhorando o desempenho.
+    \item Implementar interface gráfica para facilitar o uso por operadores não técnicos.
+    \item Adicionar testes automatizados mais abrangentes, cobrindo casos de borda e validação de entradas.
+    \item Permitir remoção e edição de regiões e queimadas, aumentando a flexibilidade do sistema.
+    \item Melhorar a validação de datas e outros campos, tornando o sistema mais robusto contra entradas inválidas.
+\end{itemize}
+
+Essas melhorias visam tornar o sistema mais eficiente, amigável e confiável, alinhando-se com as necessidades reais de um sistema de gerenciamento de queimadas.
+
+\section{Atendimento aos Requisitos do Projeto}
+
+Todas as funcionalidades essenciais foram implementadas conforme os requisitos do projeto: cadastro e consulta de regiões e queimadas, geração de relatórios, persistência de dados e uso de algoritmos clássicos de grafos. O sistema foi testado e demonstrou atender aos objetivos propostos, estando preparado para futuras expansões.
 
 \section{Conclusão}
+
+O desenvolvimento deste projeto proporcionou uma experiência prática valiosa com algoritmos de grafos, manipulação de estruturas dinâmicas e persistência de dados em C. As decisões de projeto adotadas garantiram a clareza, eficiência e robustez do sistema. O sistema está pronto para ser expandido e melhorado, servindo como base sólida para aplicações reais de gerenciamento de queimadas e análise de redes.
+
+\section{Referências}
+
+\begin{itemize}
+    \item Cormen, T. H., Leiserson, C. E., Rivest, R. L., \& Stein, C. \textit{Algoritmos: Teoria e Prática} (3ª edição).
+    \item Szwarcfiter, J. L. \textit{Teoria Computacional de Grafos}.
+\end{itemize}
 
 \end{document}

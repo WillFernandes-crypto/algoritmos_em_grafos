@@ -30,13 +30,14 @@
 
 1747437180 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\wildfire_management.h
 
-1747434849 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\utils.c
+1747595135 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\utils.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	<ctype.h>
 	"utils.h"
 
-1747434866 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\utils.h
+1747595108 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\utils.h
 
 1747437486 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\wildfire_management.c
 	<stdio.h>
@@ -44,7 +45,7 @@
 	<string.h>
 	"wildfire_management.h"
 
-1747443057 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\main.c
+1747595269 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\main.c
 	<stdio.h>
 	<stdlib.h>
 	<windows.h>
@@ -53,4 +54,32 @@
 	"wildfire_management.h"
 	"report.h"
 	"utils.h"
+
+1747596379 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\tests.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../Unity-master/src/unity.h"
+	"utils.h"
+	"graph.h"
+	"region.h"
+	"wildfire_management.h"
+
+1745631304 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\unity-master\src\unity.h
+	"unity_internals.h"
+
+1745631304 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\unity-master\src\unity_internals.h
+	"unity_config.h"
+	<setjmp.h>
+	<math.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdint.h>
+	<limits.h>
+	<sdkddkver.h>
+	<stdnoreturn.h>
+	<stdio.h>
+	<stdio.h>
+	<time.h>
+	<time.h>
 
