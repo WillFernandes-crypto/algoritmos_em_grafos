@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.5.16)  18 MAY 2025 17:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.5.16)  19 MAY 2025 03:43
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -61,44 +61,51 @@ Overfull \hbox (6.19441pt too wide) in paragraph at lines 23--24
 {C:/Users/wilso/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
 
 [2]
-Overfull \hbox (61.58257pt too wide) in paragraph at lines 82--83
+Overfull \hbox (61.58257pt too wide) in paragraph at lines 95--96
 []\OT1/cmtt/m/n/10 save[]regions\OT1/cmr/m/n/10 , \OT1/cmtt/m/n/10 save[]edges\OT1/cmr/m/n/10 , \OT1/cmtt/m/n/10 save[]wildfires \OT1/cmr/m/n/10 (\OT1/cmr/m/it/10 re-gion.c\OT1/cmr/m/n/10 , \OT1/cmr/m/it/10 graph.c\OT1/cmr/m/n/10 , \OT1/cmr/m/it/10 wild-fire[]management.c\OT1/cmr/m/n/10 ):
- []
-
-
-Overfull \hbox (16.15155pt too wide) in paragraph at lines 84--85
-[]\OT1/cmtt/m/n/10 report[]all[]regions\OT1/cmr/m/n/10 , \OT1/cmtt/m/n/10 report[]all[]wildfires\OT1/cmr/m/n/10 , \OT1/cmtt/m/n/10 report[]wildfires[]by[]region
- []
-
-
-Overfull \hbox (3.18239pt too wide) in paragraph at lines 90--91
-\OT1/cmr/m/n/10 Foram im-ple-men-ta-dos testes au-tom-a-ti-za-dos (ar-quivo \OT1/cmr/m/it/10 tests.c\OT1/cmr/m/n/10 ) para val-i-dar fun^^Xc~oes
  []
 
 
 
 [3]
+Overfull \hbox (16.15155pt too wide) in paragraph at lines 97--98
+[]\OT1/cmtt/m/n/10 report[]all[]regions\OT1/cmr/m/n/10 , \OT1/cmtt/m/n/10 report[]all[]wildfires\OT1/cmr/m/n/10 , \OT1/cmtt/m/n/10 report[]wildfires[]by[]region
+ []
+
+
+Overfull \hbox (3.18239pt too wide) in paragraph at lines 103--104
+\OT1/cmr/m/n/10 Foram im-ple-men-ta-dos testes au-tom-a-ti-za-dos (ar-quivo \OT1/cmr/m/it/10 tests.c\OT1/cmr/m/n/10 ) para val-i-dar fun^^Xc~oes
+ []
+
+
 
 [4]
+Overfull \hbox (14.02579pt too wide) in paragraph at lines 124--125
+[]\OT1/cmr/m/n/10 Navegue at^^Se a pasta \OT1/cmtt/m/n/10 Sistema de Gerenciamento de Combate a Queimadas
+ []
 
-[5] (Relatório.aux)
+
+
+[5]
+
+[6] (Relatório.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-04-14>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 478 strings out of 469940
- 9125 string characters out of 5469409
- 433186 words of memory out of 5000000
- 27354 multiletter control sequences out of 15000+600000
+ 479 strings out of 469940
+ 9134 string characters out of 5469409
+ 434186 words of memory out of 5000000
+ 27355 multiletter control sequences out of 15000+600000
  631622 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 35i,7n,38p,678b,208s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 35i,7n,38p,719b,273s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\wilso\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk><C:/Users/wilso/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/wilso/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/wilso/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/wilso/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/wilso/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/wilso/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/wilso/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on Relatório.pdf (5 pages, 128522 bytes).
+Output written on Relatório.pdf (6 pages, 132761 bytes).
 PDF statistics:
- 59 PDF objects out of 1000 (max. 8388607)
+ 62 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -6,8 +6,12 @@
 #include "wildfire_management.h"
 #include "report.h"
 #include "utils.h"
+#include "simulation.h"
+#include "brigade.h"
 
 #define MAX_REGIOES 100
+
+static int proxima_regiao = 0; // fora do main(), ou como variável estática no main()
 
 void menu() {
     printf("\n=== Sistema de Gerenciamento de Combate a Queimadas ===\n");
@@ -19,6 +23,8 @@ void menu() {
     printf("6. Relatório de queimadas por região\n");
     printf("7. Salvar dados\n");
     printf("8. Carregar dados\n");
+    printf("9. Simular propagação do fogo\n");
+    printf("10. Simular fogo em todos os vértices (exceto postos de brigada)\n");
     printf("0. Sair\n");
     printf("Escolha uma opção: ");
 }
@@ -41,19 +47,38 @@ int main() {
         opcao = read_int("");
         switch (opcao) {
             case 1: {
-                int idx = read_positive_int("Índice da região (0 a N-1): ");
-                if (idx < 0 || idx >= num_regioes) {
-                    printf("Índice inválido.\n");
-                    break;
-                }
-                char nome[MAX_NOME], tipo[MAX_TIPO];
+                char nome[100], tipo_vegetacao[100];
                 float area;
-                read_string("Nome: ", nome, MAX_NOME);
-                read_string("Tipo de vegetação: ", tipo, MAX_TIPO);
-                area = read_positive_float("Área (ha): ");
-                Region* reg = create_region(nome, tipo, area);
-                set_region(graph, idx, reg);
-                printf("Região cadastrada!\n");
+                int is_water_source, water_required, teams_required;
+
+                printf("Nome da região: ");
+                scanf(" %[^\n]", nome);
+
+                printf("Tipo de vegetação: ");
+                scanf(" %[^\n]", tipo_vegetacao);
+
+                printf("Área (em hectares): ");
+                scanf("%f", &area);
+
+                printf("É ponto de coleta de água? (1-Sim, 0-Não): ");
+                scanf("%d", &is_water_source);
+
+                printf("Quantidade de água necessária para apagar o fogo (em litros): ");
+                scanf("%d", &water_required);
+
+                printf("Número de equipes necessárias: ");
+                scanf("%d", &teams_required);
+
+                Region* reg = create_region(nome, tipo_vegetacao, area,
+                                           0, is_water_source,
+                                           water_required, teams_required);
+                if (reg) {
+                    set_region(graph, proxima_regiao, reg);
+                    printf("Região cadastrada com sucesso! Índice: %d\n", proxima_regiao);
+                    proxima_regiao++;
+                } else {
+                    printf("Erro ao cadastrar região.\n");
+                }
                 break;
             }
             case 2: {
@@ -120,6 +145,78 @@ int main() {
                     printf("Erro ao carregar dados!\n");
                 }
                 break;
+            case 9: {
+                int capacidade = read_positive_int("Capacidade do caminhão (litros): ");
+                int num_postos = 3;
+                int num_equipes_por_posto = 1;
+
+                // Zera todos os postos antes do sorteio
+                for (int i = 0; i < graph->num_vertices; i++) {
+                    graph->regions[i]->is_brigade_post = 0;
+                }
+
+                BrigadeSystem* bs = criar_brigade_system(graph, num_postos, num_equipes_por_posto, capacidade);
+                distribuir_postos_brigadistas(graph, bs, graph->regions, graph->num_vertices);
+
+                int inicio = read_positive_int("Região inicial do fogo: ");
+                if (graph->regions[inicio]->is_brigade_post) {
+                    printf("Não é permitido iniciar o fogo em um posto de brigadistas!\n");
+                    destruir_brigade_system(bs);
+                    break;
+                }
+
+                ResultadoSimulacao res = simular_fogo(graph, inicio, capacidade);
+
+                printf("Tempo total: %d\n", res.tempo_total);
+                printf("Vértices salvos: %d\n", res.vertices_salvos);
+                printf("Água usada: %d\n", res.agua_usada);
+
+                // NOVO: imprime caminhos percorridos
+                imprimir_caminhos_percorridos(bs);
+
+                free(res.caminhoes);
+                destruir_brigade_system(bs);
+                break;
+            }
+            case 10: {
+                int capacidade = read_positive_int("Capacidade do caminhão (litros): ");
+                int num_postos = 3;
+                int num_equipes_por_posto = 1;
+
+                // Zera todos os postos antes do sorteio
+                for (int i = 0; i < graph->num_vertices; i++) {
+                    graph->regions[i]->is_brigade_post = 0;
+                }
+
+                BrigadeSystem* bs = criar_brigade_system(graph, num_postos, num_equipes_por_posto, capacidade);
+                distribuir_postos_brigadistas(graph, bs, graph->regions, graph->num_vertices);
+
+                printf("=== Relatório Consolidado de Simulações ===\n");
+                int total_salvos = 0, total_queimados = 0, total_tempo = 0, total_agua = 0, num_sim = 0;
+                for (int i = 0; i < graph->num_vertices; i++) {
+                    if (graph->regions[i]->is_brigade_post) continue;
+                    printf("\nSimulando fogo iniciado na região %d (%s):\n", i, graph->regions[i]->nome);
+                    ResultadoSimulacao res = simular_fogo(graph, i, capacidade);
+                    printf("Tempo total: %d\n", res.tempo_total);
+                    printf("Vértices salvos: %d\n", res.vertices_salvos);
+                    printf("Água usada: %d\n", res.agua_usada);
+
+                    // NOVO: imprime caminhos percorridos
+                    imprimir_caminhos_percorridos(bs);
+
+                    total_salvos += res.vertices_salvos;
+                    total_tempo += res.tempo_total;
+                    total_agua += res.agua_usada;
+                    num_sim++;
+                    free(res.caminhoes);
+                }
+                printf("\n=== MÉDIAS ===\n");
+                printf("Média de vértices salvos: %.2f\n", num_sim ? (float)total_salvos/num_sim : 0);
+                printf("Média de tempo: %.2f\n", num_sim ? (float)total_tempo/num_sim : 0);
+                printf("Média de água usada: %.2f\n", num_sim ? (float)total_agua/num_sim : 0);
+                destruir_brigade_system(bs);
+                break;
+            }
             case 0:
                 printf("Saindo...\n");
                 break;

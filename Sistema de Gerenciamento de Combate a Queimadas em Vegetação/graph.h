@@ -2,6 +2,8 @@
 #define GRAPH_H
 #include "region.h"
 
+#define MAX_VERTICES 100
+
 // Nó da lista de adjacência (aresta)
 typedef struct EdgeNode {
     int dest;               // Índice do vértice de destino

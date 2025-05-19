@@ -31,8 +31,8 @@ A modularização foi uma decisão importante para garantir a organização do c
 O sistema implementa as seguintes funcionalidades, conforme os requisitos do projeto:
 
 \begin{itemize}
-    \item Cadastro de regiões, com nome, tipo de vegetação e área.
-    \item Adição de arestas (distâncias) entre regiões.
+    \item Cadastro de regiões, com nome, tipo de vegetação, área, ponto de coleta de água, quantidade de água e equipes necessárias para combate.
+    \item Adição de arestas (distâncias) entre regiões, representando rotas de acesso e custos de deslocamento.
     \item Registro de queimadas, associando-as a uma região, data e intensidade.
     \item Geração de relatórios:
         \begin{itemize}
@@ -42,6 +42,14 @@ O sistema implementa as seguintes funcionalidades, conforme os requisitos do pro
         \end{itemize}
     \item Persistência de dados: salvamento e carregamento de regiões, arestas e queimadas em arquivos binários.
     \item Interface de menu interativo, com validação de entradas e mensagens de erro.
+    \item Simulação automática da propagação do fogo e do combate, incluindo:
+        \begin{itemize}
+            \item Sorteio aleatório de três postos de brigadistas antes de cada simulação.
+            \item Caminhões de brigada com capacidade limitada de água, reabastecimento automático e deslocamento pelo menor caminho (Dijkstra).
+            \item Propagação do fogo em tempos discretos (BFS), exigindo água e equipes para extinção.
+            \item Relatório detalhado da simulação: número de vértices salvos, tempo para conter o fogo, água utilizada e caminhos percorridos por cada equipe.
+            \item Execução de simulações para todos os vértices possíveis (exceto postos de brigada) e geração de relatório consolidado.
+        \end{itemize}
 \end{itemize}
 
 \textbf{Exemplo de uso:}
@@ -56,11 +64,16 @@ O sistema implementa as seguintes funcionalidades, conforme os requisitos do pro
 6. Relatório de queimadas por região
 7. Salvar dados
 8. Carregar dados
+9. Simulação em um vértice
+10. Simulação em todos os vértices possíveis
 0. Sair
 Escolha uma opção: 1
 Nome da região: Cerrado Norte
 Tipo de vegetação: Cerrado
 Área (hectares): 150.0
+Ponto de coleta de água: Rio Xingu
+Quantidade de água (litros): 5000
+Equipes necessárias: 3
 Região cadastrada!
 \end{verbatim}
 
@@ -104,9 +117,27 @@ Foram implementados testes automatizados (arquivo \textit{tests.c}) para validar
 
 Essas melhorias visam tornar o sistema mais eficiente, amigável e confiável, alinhando-se com as necessidades reais de um sistema de gerenciamento de queimadas.
 
+\section{Instruções para Execução do Código}
+
+\begin{itemize}
+    \item Certifique-se de ter um compilador C instalado (ex: \texttt{gcc}).
+    \item Navegue até a pasta \texttt{Sistema de Gerenciamento de Combate a Queimadas em Vegetação}.
+    \item Compile o projeto usando o comando:
+    \begin{verbatim}
+    make
+    \end{verbatim}
+    \item Execute o programa:
+    \begin{verbatim}
+    ./main
+    \end{verbatim}
+    \item Siga o menu interativo para cadastrar regiões, adicionar arestas, registrar queimadas, gerar relatórios e realizar simulações.
+    \item Para simular o combate ao fogo, utilize as opções 9 (simulação em um vértice) ou 10 (simulação em todos os vértices possíveis).
+    \item Os dados podem ser salvos e carregados a qualquer momento pelas opções do menu.
+\end{itemize}
+
 \section{Atendimento aos Requisitos do Projeto}
 
-Todas as funcionalidades essenciais foram implementadas conforme os requisitos do projeto: cadastro e consulta de regiões e queimadas, geração de relatórios, persistência de dados e uso de algoritmos clássicos de grafos. O sistema foi testado e demonstrou atender aos objetivos propostos, estando preparado para futuras expansões.
+Todas as funcionalidades essenciais foram implementadas conforme os requisitos do projeto: cadastro e consulta de regiões e queimadas, geração de relatórios, persistência de dados e uso de algoritmos clássicos de grafos. O sistema simula corretamente a propagação do fogo e o deslocamento das equipes, sorteia automaticamente os postos de brigada, executa simulações para todos os vértices possíveis e apresenta relatórios detalhados, incluindo os caminhos percorridos pelas equipes. O sistema foi testado e demonstrou atender aos objetivos propostos, estando preparado para futuras expansões.
 
 \section{Conclusão}
 
