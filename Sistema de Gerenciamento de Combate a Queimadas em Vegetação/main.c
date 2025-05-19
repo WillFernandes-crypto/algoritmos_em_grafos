@@ -147,33 +147,28 @@ int main() {
                 break;
             case 9: {
                 int capacidade = read_positive_int("Capacidade do caminhão (litros): ");
-                int num_postos = 3;
-                int num_equipes_por_posto = 1;
+                int inicio;
+                // lê e valida a região inicial
+                do {
+                    inicio = read_positive_int("Região inicial do fogo: ");
+                    if (inicio < 0 || inicio >= graph->num_vertices)
+                        printf("Índice inválido. Tente novamente.\n");
+                } while (inicio < 0 || inicio >= graph->num_vertices);
 
-                // Zera todos os postos antes do sorteio
-                for (int i = 0; i < graph->num_vertices; i++) {
+                // zera marcações anteriores
+                for (int i = 0; i < graph->num_vertices; i++)
                     graph->regions[i]->is_brigade_post = 0;
-                }
 
-                BrigadeSystem* bs = criar_brigade_system(graph, num_postos, num_equipes_por_posto, capacidade);
-                distribuir_postos_brigadistas(graph, bs, graph->regions, graph->num_vertices);
+                // cria e distribui excluindo 'inicio'
+                BrigadeSystem* bs = criar_brigade_system(graph, 3, 1, capacidade);
+                distribuir_postos_brigadistas_exc(graph, bs, graph->regions, graph->num_vertices, inicio);
 
-                int inicio = read_positive_int("Região inicial do fogo: ");
-                if (graph->regions[inicio]->is_brigade_post) {
-                    printf("Não é permitido iniciar o fogo em um posto de brigadistas!\n");
-                    destruir_brigade_system(bs);
-                    break;
-                }
-
+                // executa simulação
                 ResultadoSimulacao res = simular_fogo(graph, inicio, capacidade);
-
                 printf("Tempo total: %d\n", res.tempo_total);
                 printf("Vértices salvos: %d\n", res.vertices_salvos);
                 printf("Água usada: %d\n", res.agua_usada);
-
-                // NOVO: imprime caminhos percorridos
                 imprimir_caminhos_percorridos(bs);
-
                 free(res.caminhoes);
                 destruir_brigade_system(bs);
                 break;

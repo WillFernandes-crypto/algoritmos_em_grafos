@@ -18,6 +18,19 @@ static void sortear_vertices_distintos(int *dest, int n, int max) {
     }
 }
 
+// Sorteia 'n' vértices distintos em [0,max), pulando 'excluida'
+static void sortear_vertices_distintos_exc(int *dest, int n, int max, int excluida) {
+    int count = 0;
+    while (count < n) {
+        int v = rand() % max;
+        if (v == excluida) continue;
+        int ok = 1;
+        for (int j = 0; j < count; ++j)
+            if (dest[j] == v) { ok = 0; break; }
+        if (ok) dest[count++] = v;
+    }
+}
+
 BrigadeSystem* criar_brigade_system(Graph *grafo, int num_postos, int num_equipes_por_posto, int capacidade_caminhao) {
     BrigadeSystem *bs = malloc(sizeof(BrigadeSystem));
     bs->num_postos = num_postos;
@@ -60,6 +73,21 @@ void distribuir_postos_brigadistas(Graph *grafo, BrigadeSystem *bs, Region **reg
         bs->postos[i].vertice = vertices[i];
         for (int j = 0; j < bs->postos[i].num_equipes; ++j) {
             bs->postos[i].equipes[j].posicao = vertices[i];
+            bs->postos[i].caminhoes[j].posicao = vertices[i];
+        }
+        regioes[vertices[i]]->is_brigade_post = 1;
+    }
+    free(vertices);
+}
+
+// Distribuição garantindo que não haja posto em 'excluida'
+void distribuir_postos_brigadistas_exc(Graph *grafo, BrigadeSystem *bs, Region **regioes, int num_regioes, int excluida) {
+    int *vertices = malloc(bs->num_postos * sizeof(int));
+    sortear_vertices_distintos_exc(vertices, bs->num_postos, num_regioes, excluida);
+    for (int i = 0; i < bs->num_postos; ++i) {
+        bs->postos[i].vertice = vertices[i];
+        for (int j = 0; j < bs->postos[i].num_equipes; ++j) {
+            bs->postos[i].equipes[j].posicao   = vertices[i];
             bs->postos[i].caminhoes[j].posicao = vertices[i];
         }
         regioes[vertices[i]]->is_brigade_post = 1;
