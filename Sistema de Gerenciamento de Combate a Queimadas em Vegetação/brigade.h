@@ -55,10 +55,10 @@ int encontrar_posto_mais_proximo(BrigadeSystem *bs, Graph *grafo, int alvo);
 
 // Envia equipes e caminhões para combater incêndio em um vértice
 // Retorna 1 se conseguiu enviar recursos suficientes, 0 se não foi possível
-int despachar_brigadistas_para_fogo(BrigadeSystem *bs, Graph *grafo, Region *regioes, int vertice_fogo);
+int despachar_brigadistas_para_fogo(BrigadeSystem *bs, Graph *grafo, Region **regioes, int vertice_fogo);
 
 // Atualiza o estado dos caminhões e equipes (movimentação, reabastecimento, etc)
-void atualizar_brigade_system(BrigadeSystem *bs, Graph *grafo, Region *regioes, int num_regioes);
+void atualizar_brigade_system(BrigadeSystem *bs, Graph *grafo, Region **regioes, int num_regioes);
 
 // Relatórios
 void imprimir_status_brigade_system(BrigadeSystem *bs, Graph *grafo, Region *regioes, int num_regioes);

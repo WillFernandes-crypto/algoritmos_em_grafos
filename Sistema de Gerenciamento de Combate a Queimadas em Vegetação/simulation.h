@@ -28,6 +28,7 @@ typedef struct {
 
 // Simula a propagação do fogo e o combate automático
 ResultadoSimulacao simular_fogo(Graph* graph, int inicio_fogo, int capacidade_caminhao);
+SimulationResult simular_propagacao_fogo(Graph* graph, BrigadeSystem* brigadas, int vertice_inicial);
 
 #endif
 

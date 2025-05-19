@@ -168,12 +168,12 @@ static int encontrar_ponto_agua_mais_proximo(Graph *grafo, Region *regioes, int 
 }
 
 // Despacha equipes e caminhões para combater fogo em vertice_fogo
-int despachar_brigadistas_para_fogo(BrigadeSystem *bs, Graph *grafo, Region *regioes, int vertice_fogo) {
+int despachar_brigadistas_para_fogo(BrigadeSystem *bs, Graph *grafo, Region **regioes, int vertice_fogo) {
     int posto_idx = encontrar_posto_mais_proximo(bs, grafo, vertice_fogo);
     if (posto_idx == -1) return 0;
     BrigadePost *posto = &bs->postos[posto_idx];
-    int equipes_necessarias = regioes[vertice_fogo].teams_required;
-    int agua_necessaria = regioes[vertice_fogo].water_required;
+    int equipes_necessarias = regioes[vertice_fogo]->teams_required;
+    int agua_necessaria = regioes[vertice_fogo]->water_required;
     int equipes_enviadas = 0, agua_enviada = 0;
 
     // Envia equipes e caminhões disponíveis
@@ -209,7 +209,7 @@ int despachar_brigadistas_para_fogo(BrigadeSystem *bs, Graph *grafo, Region *reg
 }
 
 // Atualiza movimentação dos caminhões/equipes, reabastecimento, etc
-void atualizar_brigade_system(BrigadeSystem *bs, Graph *grafo, Region *regioes, int num_regioes) {
+void atualizar_brigade_system(BrigadeSystem *bs, Graph *grafo, Region **regioes, int num_regioes) {
     for (int p = 0; p < bs->num_postos; ++p) {
         BrigadePost *posto = &bs->postos[p];
         for (int i = 0; i < posto->num_equipes; ++i) {
@@ -224,17 +224,18 @@ void atualizar_brigade_system(BrigadeSystem *bs, Graph *grafo, Region *regioes, 
                 if (caminhao->caminho_idx == caminhao->caminho_tam) {
                     int v = caminhao->posicao;
                     // Se for ponto de água, reabastece
-                    if (regioes[v].is_water_source || regioes[v].is_brigade_post) {
+                    if (regioes[v]->is_water_source || regioes[v]->is_brigade_post) {
                         caminhao->agua_atual = caminhao->capacidade_agua;
                     }
                     // Se for local de fogo, combate
-                    if (regioes[v].on_fire) {
-                        int agua_usada = regioes[v].water_required;
+                    if (regioes[v]->on_fire) {
+                        int agua_usada = regioes[v]->water_required;
                         if (caminhao->agua_atual >= agua_usada) {
                             caminhao->agua_atual -= agua_usada;
-                            regioes[v].on_fire = 0;
-                            regioes[v].burned = 0;
-                            printf("Equipe %d do posto %d apagou o fogo em %s!\n", equipe->id, posto->id, regioes[v].nome);
+                            regioes[v]->on_fire = 0;
+                            regioes[v]->burned = 1;   // marca como “processado” para não reinfectar
+                            printf("Equipe %d do posto %d apagou o fogo em %s!\n",
+                                   equipe->id, posto->id, regioes[v]->nome);
                         } else {
                             // Precisa reabastecer e voltar
                             int ponto_agua = encontrar_ponto_agua_mais_proximo(grafo, regioes, num_regioes, v);

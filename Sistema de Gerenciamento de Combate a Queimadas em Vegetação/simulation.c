@@ -75,57 +75,53 @@ SimulationResult simular_propagacao_fogo(Graph* graph, BrigadeSystem* brigadas, 
     int tempo = 0;
     int agua_usada = 0;
 
+    // zera estado anterior de fogo
     resetar_estado_fogo(graph);
 
-    // Fila para BFS do fogo
+    // aloca fila e vetor de tempo de fogo
     int* fila = malloc(n * sizeof(int));
-    int* tempo_fogo = calloc(n, sizeof(int)); // tempo que cada vértice está pegando fogo
+    int* tempo_fogo = calloc(n, sizeof(int));
     int ini = 0, fim = 0;
 
-    // Inicia o fogo
+    // inicia o fogo
     graph->regions[vertice_inicial]->on_fire = 1;
     fila[fim++] = vertice_inicial;
     tempo_fogo[vertice_inicial] = 0;
 
     int fogo_ativo = 1;
-
     while (fogo_ativo) {
         fogo_ativo = 0;
-        int tamanho_fila = fim - ini;
+        int tamanho = fim - ini;
 
         // 1. Propagação do fogo (BFS discreto)
-        for (int i = 0; i < tamanho_fila; i++) {
+        for (int k = 0; k < tamanho; ++k) {
             int u = fila[ini++];
             if (!graph->regions[u]->on_fire || graph->regions[u]->burned) continue;
 
-            // Se o fogo não foi apagado neste tempo, marca como queimado após 1 unidade de tempo
+            // se já está 1 passo pegando fogo, queima
             if (tempo_fogo[u] >= 1) {
                 graph->regions[u]->burned = 1;
                 graph->regions[u]->on_fire = 0;
                 continue;
             }
 
-            // Propaga para vizinhos
-            EdgeNode* e = graph->adj_list[u];
-            while (e) {
+            // propaga para vizinhos
+            for (EdgeNode* e = graph->adj_list[u]; e; e = e->next) {
                 int v = e->dest;
                 if (!graph->regions[v]->on_fire && !graph->regions[v]->burned) {
-                    graph->regions[v]->on_fire = 2; // 2 = vai pegar fogo no próximo tempo
+                    graph->regions[v]->on_fire = 2;     // agendado p/ pegar fogo
                     tempo_fogo[v] = 0;
-                    fila[fim++] = v;
                 }
-                e = e->next;
             }
             tempo_fogo[u]++;
             fogo_ativo = 1;
         }
 
-        // 2. Brigadistas tentam apagar o fogo nos vértices em chamas
-        for (int i = 0; i < n; i++) {
+        // 2. Brigadistas tentam apagar incêndio
+        for (int i = 0; i < n; ++i) {
             if (graph->regions[i]->on_fire == 1 && !graph->regions[i]->burned) {
-                // Tenta despachar brigadistas para apagar o fogo
-                int sucesso = despachar_brigadistas_para_fogo(brigadas, graph, graph->regions, i);
-                if (sucesso) {
+                int ok = despachar_brigadistas_para_fogo(brigadas, graph, graph->regions, i);
+                if (ok) {
                     graph->regions[i]->on_fire = 0;
                     graph->regions[i]->burned = 0;
                     agua_usada += graph->regions[i]->water_required;
@@ -133,24 +129,31 @@ SimulationResult simular_propagacao_fogo(Graph* graph, BrigadeSystem* brigadas, 
             }
         }
 
-        // 3. Atualiza estados: vértices marcados como 2 pegam fogo de fato agora
-        for (int i = 0; i < n; i++) {
-            if (graph->regions[i]->on_fire == 2)
+        // 3. Concretiza fogos agendados
+        for (int i = 0; i < n; ++i) {
+            if (graph->regions[i]->on_fire == 2) {
                 graph->regions[i]->on_fire = 1;
+                fogo_ativo = 1;
+            }
         }
 
-        // 4. Atualiza movimentação dos caminhões/equipes (um passo por tempo)
+        // 4. Atualiza movimentação de caminhões/equipes
         atualizar_brigade_system(brigadas, graph, graph->regions, n);
 
-        // 5. Verifica se ainda há fogo ativo
-        for (int i = 0; i < n; i++) {
-            if (graph->regions[i]->on_fire == 1)
-                fogo_ativo = 1;
+        // 5. Reconstroi fila para próxima iteração
+        ini = 0;
+        fim = 0;
+        for (int i = 0; i < n; ++i) {
+            if (graph->regions[i]->on_fire == 1 && !graph->regions[i]->burned) {
+                fila[fim++] = i;
+                // mantém tempo_fogo[i] para queimar após 1 ciclo
+            }
         }
 
         tempo++;
     }
 
+    // contabiliza resultados
     int salvos = 0, queimados = 0;
     contar_resultados(graph, &salvos, &queimados);
 

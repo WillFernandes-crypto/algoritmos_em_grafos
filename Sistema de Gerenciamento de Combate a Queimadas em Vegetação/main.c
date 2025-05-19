@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
+#include <time.h>           // ← adicionar
 #include "graph.h"
 #include "region.h"
 #include "wildfire_management.h"
@@ -31,6 +32,7 @@ void menu() {
 
 int main() {
     SetConsoleOutputCP(CP_UTF8);
+    srand((unsigned)time(NULL));   // ← inicializa rand()
 
     int num_regioes = read_positive_int("Informe o número de regiões: ");
     if (num_regioes <= 0 || num_regioes > MAX_REGIOES) {
@@ -145,73 +147,67 @@ int main() {
                     printf("Erro ao carregar dados!\n");
                 }
                 break;
-            case 9: {
+            case 9: {  // Simulação em um vértice
                 int capacidade = read_positive_int("Capacidade do caminhão (litros): ");
                 int inicio;
-                // lê e valida a região inicial
                 do {
                     inicio = read_positive_int("Região inicial do fogo: ");
                     if (inicio < 0 || inicio >= graph->num_vertices)
                         printf("Índice inválido. Tente novamente.\n");
                 } while (inicio < 0 || inicio >= graph->num_vertices);
 
-                // zera marcações anteriores
+                // zera flags de posto e sorteia sem colocar em 'inicio'
                 for (int i = 0; i < graph->num_vertices; i++)
                     graph->regions[i]->is_brigade_post = 0;
+                BrigadeSystem* bs9 = criar_brigade_system(graph, 3, 1, capacidade);
+                distribuir_postos_brigadistas_exc(graph, bs9, graph->regions, graph->num_vertices, inicio);
 
-                // cria e distribui excluindo 'inicio'
-                BrigadeSystem* bs = criar_brigade_system(graph, 3, 1, capacidade);
-                distribuir_postos_brigadistas_exc(graph, bs, graph->regions, graph->num_vertices, inicio);
-
-                // executa simulação
-                ResultadoSimulacao res = simular_fogo(graph, inicio, capacidade);
-                printf("Tempo total: %d\n", res.tempo_total);
-                printf("Vértices salvos: %d\n", res.vertices_salvos);
-                printf("Água usada: %d\n", res.agua_usada);
-                imprimir_caminhos_percorridos(bs);
-                free(res.caminhoes);
-                destruir_brigade_system(bs);
+                // executa simulação “completa”
+                SimulationResult res9 = simular_propagacao_fogo(graph, bs9, inicio);
+                printf("Tempo total: %d\n", res9.tempo_total);
+                printf("Vértices salvos: %d\n", res9.vertices_salvos);
+                printf("Água usada: %d\n", res9.agua_usada);
+                imprimir_caminhos_percorridos(bs9);
+                destruir_brigade_system(bs9);
                 break;
             }
-            case 10: {
+
+            case 10: { // Simulação em todos os vértices possíveis
                 int capacidade = read_positive_int("Capacidade do caminhão (litros): ");
-                int num_postos = 3;
-                int num_equipes_por_posto = 1;
+                int total_salvos = 0, total_queimados = 0;
+                int total_tempo = 0, total_agua = 0, num_sim = 0;
 
-                // Zera todos os postos antes do sorteio
-                for (int i = 0; i < graph->num_vertices; i++) {
-                    graph->regions[i]->is_brigade_post = 0;
-                }
+                printf("=== RELATÓRIO CONSOLIDADO DE SIMULAÇÕES ===\n");
+                for (int v = 0; v < graph->num_vertices; v++) {
+                    // zera flags de posto e sorteia sem colocar em 'v'
+                    for (int i = 0; i < graph->num_vertices; i++)
+                        graph->regions[i]->is_brigade_post = 0;
+                    BrigadeSystem* bs10 = criar_brigade_system(graph, 3, 1, capacidade);
+                    distribuir_postos_brigadistas_exc(graph, bs10, graph->regions, graph->num_vertices, v);
 
-                BrigadeSystem* bs = criar_brigade_system(graph, num_postos, num_equipes_por_posto, capacidade);
-                distribuir_postos_brigadistas(graph, bs, graph->regions, graph->num_vertices);
+                    SimulationResult res10 = simular_propagacao_fogo(graph, bs10, v);
+                    printf("\nSimulação %d (fogo em %d): Tempo=%d, Salvos=%d, Água=%d\n",
+                           v, v, res10.tempo_total, res10.vertices_salvos, res10.agua_usada);
+                    imprimir_caminhos_percorridos(bs10);
 
-                printf("=== Relatório Consolidado de Simulações ===\n");
-                int total_salvos = 0, total_queimados = 0, total_tempo = 0, total_agua = 0, num_sim = 0;
-                for (int i = 0; i < graph->num_vertices; i++) {
-                    if (graph->regions[i]->is_brigade_post) continue;
-                    printf("\nSimulando fogo iniciado na região %d (%s):\n", i, graph->regions[i]->nome);
-                    ResultadoSimulacao res = simular_fogo(graph, i, capacidade);
-                    printf("Tempo total: %d\n", res.tempo_total);
-                    printf("Vértices salvos: %d\n", res.vertices_salvos);
-                    printf("Água usada: %d\n", res.agua_usada);
-
-                    // NOVO: imprime caminhos percorridos
-                    imprimir_caminhos_percorridos(bs);
-
-                    total_salvos += res.vertices_salvos;
-                    total_tempo += res.tempo_total;
-                    total_agua += res.agua_usada;
+                    total_salvos    += res10.vertices_salvos;
+                    total_queimados += res10.vertices_queimados;
+                    total_tempo     += res10.tempo_total;
+                    total_agua      += res10.agua_usada;
                     num_sim++;
-                    free(res.caminhoes);
+                    destruir_brigade_system(bs10);
                 }
-                printf("\n=== MÉDIAS ===\n");
-                printf("Média de vértices salvos: %.2f\n", num_sim ? (float)total_salvos/num_sim : 0);
-                printf("Média de tempo: %.2f\n", num_sim ? (float)total_tempo/num_sim : 0);
-                printf("Média de água usada: %.2f\n", num_sim ? (float)total_agua/num_sim : 0);
-                destruir_brigade_system(bs);
+
+                printf("\n=== RESULTADOS GERAIS ===\n");
+                printf("Média de vértices salvos: %.2f\n",
+                       num_sim ? (float)total_salvos/num_sim : 0.0f);
+                printf("Média de tempo: %.2f\n",
+                       num_sim ? (float)total_tempo/num_sim : 0.0f);
+                printf("Média de água usada: %.2f\n",
+                       num_sim ? (float)total_agua/num_sim : 0.0f);
                 break;
             }
+
             case 0:
                 printf("Saindo...\n");
                 break;
