@@ -109,45 +109,33 @@ int save_edges(const char* filename, const Graph* graph) {
 int load_edges(const char* filename, Graph* graph) {
     FILE* f = fopen(filename, "rb");
     if (!f) return 0;
-    int num_vertices = 0;
-    fread(&num_vertices, sizeof(int), 1, f);
-    if (num_vertices != graph->num_vertices) {
+    int nv;
+    if (fread(&nv, sizeof(int), 1, f) != 1 || nv != graph->num_vertices) {
         fclose(f);
         return 0;
     }
-    // Limpa arestas antigas
-    for (int i = 0; i < num_vertices; i++) {
+    // limpa arestas atuais
+    for (int i = 0; i < nv; i++) {
         EdgeNode* e = graph->adj_list[i];
         while (e) {
-            EdgeNode* temp = e;
+            EdgeNode* tmp = e;
             e = e->next;
-            free(temp);
+            free(tmp);
         }
         graph->adj_list[i] = NULL;
     }
-    for (int i = 0; i < num_vertices; i++) {
-        int count = 0;
+    // lê e recria arestas
+    for (int i = 0; i < nv; i++) {
+        int count;
         fread(&count, sizeof(int), 1, f);
         for (int j = 0; j < count; j++) {
             int dest;
-            float weight;
+            float w;
             fread(&dest, sizeof(int), 1, f);
-            fread(&weight, sizeof(float), 1, f);
-            // Adiciona aresta (evita duplicidade)
-            EdgeNode* e = graph->adj_list[i];
-            int exists = 0;
-            while (e) {
-                if (e->dest == dest && e->weight == weight) {
-                    exists = 1;
-                    break;
-                }
-                e = e->next;
-            }
-            if (!exists) {
-                EdgeNode* new_edge = create_edge(dest, weight);
-                new_edge->next = graph->adj_list[i];
-                graph->adj_list[i] = new_edge;
-            }
+            fread(&w, sizeof(float), 1, f);
+            EdgeNode* ne = create_edge(dest, w);
+            ne->next = graph->adj_list[i];
+            graph->adj_list[i] = ne;
         }
     }
     fclose(f);

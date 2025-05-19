@@ -79,8 +79,13 @@ int save_wildfires(const char* filename, const WildfireList* list) {
 int load_wildfires(const char* filename, WildfireList* list) {
     FILE* f = fopen(filename, "rb");
     if (!f) return 0;
-    // Limpa lista antiga
-    free_wildfire_list(list);
+    // limpa só os nós
+    Wildfire* cur = list->head;
+    while (cur) {
+        Wildfire* tmp = cur;
+        cur = cur->next;
+        free(tmp);
+    }
     list->head = NULL;
     int count = 0;
     fread(&count, sizeof(int), 1, f);

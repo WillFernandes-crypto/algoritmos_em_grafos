@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1747436165 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\graph.c
+1747688284 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\graph.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -11,7 +11,7 @@
 
 1747635416 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\region.h
 
-1747635450 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\region.c
+1747687572 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\region.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -39,13 +39,13 @@
 
 1747595108 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\utils.h
 
-1747437486 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\wildfire_management.c
+1747688306 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\wildfire_management.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"wildfire_management.h"
 
-1747636589 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\main.c
+1747687572 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\main.c
 	<stdio.h>
 	<stdlib.h>
 	<windows.h>
@@ -92,15 +92,15 @@
 	<time.h>
 	"brigade.h"
 
-1747636616 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\brigade.h
+1747688676 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\brigade.h
 	"region.h"
 	"graph.h"
 
-1747636036 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\simulation.h
+1747687572 c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\simulation.h
 	"graph.h"
 	"brigade.h"
 
-1747635855 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\simulation.c
+1747687572 source:c:\users\wilso\documents\estudos\algoritmos em grafos\trabalho\sistema de gerenciamento de combate a queimadas em vegetação\simulation.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

@@ -62,5 +62,6 @@
   "files.associations": {
     "stdio.h": "c",
     "utils.h": "c"
-  }
+  },
+  "cmake.ignoreCMakeListsMissing": true
 }

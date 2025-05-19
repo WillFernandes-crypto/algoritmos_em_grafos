@@ -53,7 +53,7 @@ void destruir_brigade_system(BrigadeSystem *bs) {
     free(bs);
 }
 
-void distribuir_postos_brigadistas(Graph *grafo, BrigadeSystem *bs, Region *regioes, int num_regioes) {
+void distribuir_postos_brigadistas(Graph *grafo, BrigadeSystem *bs, Region **regioes, int num_regioes) {
     int *vertices = malloc(bs->num_postos * sizeof(int));
     sortear_vertices_distintos(vertices, bs->num_postos, num_regioes);
     for (int i = 0; i < bs->num_postos; ++i) {
@@ -62,7 +62,7 @@ void distribuir_postos_brigadistas(Graph *grafo, BrigadeSystem *bs, Region *regi
             bs->postos[i].equipes[j].posicao = vertices[i];
             bs->postos[i].caminhoes[j].posicao = vertices[i];
         }
-        regioes[vertices[i]].is_brigade_post = 1;
+        regioes[vertices[i]]->is_brigade_post = 1;
     }
     free(vertices);
 }

@@ -46,7 +46,7 @@ BrigadeSystem* criar_brigade_system(Graph *grafo, int num_postos, int num_equipe
 void destruir_brigade_system(BrigadeSystem *bs);
 
 // Alocação inicial dos postos de brigadistas (aleatória)
-void distribuir_postos_brigadistas(Graph *grafo, BrigadeSystem *bs, Region *regioes, int num_regioes);
+void distribuir_postos_brigadistas(Graph *grafo, BrigadeSystem *bs, Region **regioes, int num_regioes);
 
 // Busca o posto mais próximo de um vértice alvo
 int encontrar_posto_mais_proximo(BrigadeSystem *bs, Graph *grafo, int alvo);
