@@ -24,8 +24,8 @@ void menu() {
     printf("6. Relatório de queimadas por região\n");
     printf("7. Salvar dados\n");
     printf("8. Carregar dados\n");
-    printf("9. Simular propagação do fogo\n");
-    printf("10. Simular fogo em todos os vértices (exceto postos de brigada)\n");
+    printf("9. Simulação em um vértice\n");
+    printf("10. Simulação em todos os vértices possíveis\n");
     printf("0. Sair\n");
     printf("Escolha uma opção: ");
 }
@@ -172,39 +172,54 @@ int main() {
                 break;
             }
 
-            case 10: { // Simulação em todos os vértices possíveis
+            case 10: { // Simulação em todos os vértices (exceto postos de brigada)
                 int capacidade = read_positive_int("Capacidade do caminhão (litros): ");
                 int total_salvos = 0, total_queimados = 0;
                 int total_tempo = 0, total_agua = 0, num_sim = 0;
 
                 printf("=== RELATÓRIO CONSOLIDADO DE SIMULAÇÕES ===\n");
-                for (int v = 0; v < graph->num_vertices; v++) {
-                    // zera flags de posto e sorteia sem colocar em 'v'
-                    for (int i = 0; i < graph->num_vertices; i++)
+                for (int v = 0; v < graph->num_vertices; ++v) {
+                    // 1) Reset de todos os flags de posto e incêndio
+                    for (int i = 0; i < graph->num_vertices; ++i) {
                         graph->regions[i]->is_brigade_post = 0;
-                    BrigadeSystem* bs10 = criar_brigade_system(graph, 3, 1, capacidade);
-                    distribuir_postos_brigadistas_exc(graph, bs10, graph->regions, graph->num_vertices, v);
+                        graph->regions[i]->on_fire         = 0;
+                        graph->regions[i]->burned          = 0;
+                    }
+                    // 2) Cria e sorteia postos _excluindo_ v
+                    BrigadeSystem* bs = criar_brigade_system(graph, 3, 1, capacidade);
+                    distribuir_postos_brigadistas_exc(
+                        graph, bs, graph->regions, graph->num_vertices, v);
 
-                    SimulationResult res10 = simular_propagacao_fogo(graph, bs10, v);
-                    printf("\nSimulação %d (fogo em %d): Tempo=%d, Salvos=%d, Água=%d\n",
-                           v, v, res10.tempo_total, res10.vertices_salvos, res10.agua_usada);
-                    imprimir_caminhos_percorridos(bs10);
+                    // 3) Se v virou posto, pula
+                    if (graph->regions[v]->is_brigade_post) {
+                        destruir_brigade_system(bs);
+                        continue;
+                    }
 
-                    total_salvos    += res10.vertices_salvos;
-                    total_queimados += res10.vertices_queimados;
-                    total_tempo     += res10.tempo_total;
-                    total_agua      += res10.agua_usada;
+                    // 4) Executa simulação para início em v
+                    printf("\n--- Simulação %d (fogo em %d) ---\n", num_sim, v);
+                    SimulationResult res = simular_propagacao_fogo(graph, bs, v);
+                    printf("Tempo=%d, Salvos=%d, Água=%d\n",
+                           res.tempo_total, res.vertices_salvos, res.agua_usada);
+                    imprimir_caminhos_percorridos(bs);
+
+                    // 5) Acumula estatísticas
+                    total_salvos    += res.vertices_salvos;
+                    total_queimados += res.vertices_queimados;
+                    total_tempo     += res.tempo_total;
+                    total_agua      += res.agua_usada;
                     num_sim++;
-                    destruir_brigade_system(bs10);
+
+                    destruir_brigade_system(bs);
                 }
 
+                // 6) Estatísticas finais
                 printf("\n=== RESULTADOS GERAIS ===\n");
-                printf("Média de vértices salvos: %.2f\n",
-                       num_sim ? (float)total_salvos/num_sim : 0.0f);
-                printf("Média de tempo: %.2f\n",
-                       num_sim ? (float)total_tempo/num_sim : 0.0f);
-                printf("Média de água usada: %.2f\n",
-                       num_sim ? (float)total_agua/num_sim : 0.0f);
+                if (num_sim > 0) {
+                    printf("Média de vértices salvos: %.2f\n", (float)total_salvos/num_sim);
+                    printf("Média de tempo:          %.2f\n", (float)total_tempo/num_sim);
+                    printf("Média de água usada:     %.2f\n", (float)total_agua/num_sim);
+                }
                 break;
             }
 
